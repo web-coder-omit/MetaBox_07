@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: Metabox_7
  * Plugin URI:  Plugin URL Link
@@ -11,35 +12,46 @@
  * text-domain: mb_7
  */
 // Languages file loaded
-function plugin_file_function(){
-    load_plugin_textdomain('mb_7', false, dirname(__FILE__)."/languages");
+function plugin_file_function()
+{
+    load_plugin_textdomain('mb_7', false, dirname(__FILE__) . "/languages");
 }
-add_action('plugins_loaded','plugin_file_function');
- 
+add_action('plugins_loaded', 'plugin_file_function');
+
 // add CSS file
-function my_plugin_design(){
-    wp_enqueue_style('my_css_style_file', plugin_dir_url(__FILE__).'asset/admin/css/style.css',null,time());
-    wp_enqueue_script('my_js_file', plugin_dir_url(__FILE__).'asset/admin/js/main.js',array('jquery','jquery-ui-datepicker'),time(), true);
-    wp_enqueue_style('jquery-ui-js', '//code.jquery.com/jquery-3.7.1.js',null,true);
-    wp_enqueue_style('jquery-ui-js2', plugin_dir_url('https://code.jquery.com/ui/1.14.0/jquery-ui.js'),true);
+function my_plugin_design()
+{
+    wp_enqueue_style('my_css_style_file', plugin_dir_url(__FILE__) . 'asset/admin/css/style.css', null, time());
+    wp_enqueue_script('my_js_file', plugin_dir_url(__FILE__) . 'asset/admin/js/main.js', array('jquery', 'jquery-ui-datepicker'), time(), true);
+    wp_enqueue_style('jquery-ui-js', '//code.jquery.com/jquery-3.7.1.js', null, true);
+    wp_enqueue_style('jquery-ui-js2', plugin_dir_url('https://code.jquery.com/ui/1.14.0/jquery-ui.js'), true);
 }
-add_action('admin_enqueue_scripts','my_plugin_design');
+add_action('admin_enqueue_scripts', 'my_plugin_design');
 
-
+// Add mate fild in users
+add_filter('user_contactmethods',"function_of_user_meta_box");
+function function_of_user_meta_box($internal_Value){
+    $internal_Value['Facbook'] =__("Your FacebooK Id",'md_7');
+    $internal_Value['Titter'] =__("Your Twitter Id",'md_7');
+    $internal_Value['Instagram'] =__("Your Instrgram Id",'md_7');
+    return $internal_Value;
+}
 
 // Reginstation maetabox 
-function reginster_metabox_function(){
-    add_meta_box('metabox_7', __('Your InFo:','mb_7'), 'regester_metabox_function','post');
-    add_meta_box('Design_file', __('My design:','mb_7'), 'regester_metabox_as_a_design_file_function','post');
-    add_meta_box('Image_upload', __('Your Image:','mb_7'), 'image_upload_function','post');
-    add_meta_box('Images_upload', __('Your Images:','mb_7'), 'images_upload_function','post');
+function reginster_metabox_function()
+{
+    add_meta_box('metabox_7', __('Your InFo:', 'mb_7'), 'regester_metabox_function', 'post');
+    add_meta_box('Design_file', __('My design:', 'mb_7'), 'regester_metabox_as_a_design_file_function', 'post');
+    add_meta_box('Image_upload', __('Your Image:', 'mb_7'), 'image_upload_function', 'post');
+    add_meta_box('Images_upload', __('Your Images:', 'mb_7'), 'images_upload_function', 'post');
 }
-add_action('admin_init','reginster_metabox_function');
+add_action('admin_init', 'reginster_metabox_function');
 
 // Images upload outpu & HTML
-function images_upload_function($post){
-    $save_url_s= esc_attr(get_post_meta($post->ID, 'save_filds_url_s', true));
-    $save_id_s= esc_attr(get_post_meta($post->ID, 'save_filds_id_s', true));
+function images_upload_function($post)
+{
+    $save_url_s = esc_attr(get_post_meta($post->ID, 'save_filds_url_s', true));
+    $save_id_s = esc_attr(get_post_meta($post->ID, 'save_filds_id_s', true));
     $mata_imges = <<<EOD
         <div class="image_parent">
             <div class="image_child_1">
@@ -56,15 +68,16 @@ function images_upload_function($post){
         
         </div>
     EOD;
-echo $mata_imges;
+    echo $mata_imges;
 }
 
 
 
 // Image uplaod output & HTML
-function image_upload_function($post){
-    $save_url= esc_attr(get_post_meta($post->ID, 'save_filds_url', true));
-    $save_id= esc_attr(get_post_meta($post->ID, 'save_filds_id', true));
+function image_upload_function($post)
+{
+    $save_url = esc_attr(get_post_meta($post->ID, 'save_filds_url', true));
+    $save_id = esc_attr(get_post_meta($post->ID, 'save_filds_id', true));
     $mata_imge = <<<EOD
         <div class="image_parent">
             <div class="image_child_1">
@@ -81,7 +94,7 @@ function image_upload_function($post){
         
         </div>
     EOD;
-echo $mata_imge;
+    echo $mata_imge;
 }
 
 
@@ -96,7 +109,8 @@ echo $mata_imge;
 
 
 // Show meta info which is design
-function regester_metabox_as_a_design_file_function(){
+function regester_metabox_as_a_design_file_function()
+{
     $meta_design = <<<EOD
     <div class="Parent_design">
         <div class="child_1">
@@ -124,15 +138,16 @@ function regester_metabox_as_a_design_file_function(){
 
 // echo $meta_design;
 // Show meta info
-function regester_metabox_function($post){
-    $colors = array('red','green','blue','yellow','megenta','pink','black');
-    $label_1 = __('Your Name:','mb_7');
-    $label_2 = __('Your color:','mb_7');
+function regester_metabox_function($post)
+{
+    $colors = array('red', 'green', 'blue', 'yellow', 'megenta', 'pink', 'black');
+    $label_1 = __('Your Name:', 'mb_7');
+    $label_2 = __('Your color:', 'mb_7');
     $value_01 = get_post_meta($post->ID, 'save_name_fild', true);
     $colors_value = get_post_meta($post->ID, 'save_filds', true);
     $colors_value_radio = get_post_meta($post->ID, 'save_filds_radio', true);
     // echo "select color:"." ". get_post_meta($post ->ID, 'save_filds_select', true);
-    $color_select = get_post_meta($post ->ID, 'save_filds_select', true);
+    $color_select = get_post_meta($post->ID, 'save_filds_select', true);
     $meta_HTML = <<<EOD
     <div>
         <label for='names'>{$label_1}</label>
@@ -145,62 +160,63 @@ function regester_metabox_function($post){
    
     EOD;
 
-    foreach($colors as $color){
+    foreach ($colors as $color) {
         $_color = ucwords($color);
-        $clicked = in_array($color,(array)$colors_value) ? 'checked':'';
-    // $checked = in_array($color, $colors_value) ? 'checked' : '';
-        $meta_HTML .=<<<EOD
+        $clicked = in_array($color, (array)$colors_value) ? 'checked' : '';
+        // $checked = in_array($color, $colors_value) ? 'checked' : '';
+        $meta_HTML .= <<<EOD
         <label for='clr{$_color}'>{$_color}</label>
         <input id='clr{$_color}' type='checkbox' name='checkbox[]' value='{$color}' {$clicked}/>
         EOD;
     }
     $meta_HTML .= "</div>";
 
-   $meta_HTML .=<<<EOD
+    $meta_HTML .= <<<EOD
     <div>
         <label for='radio'>{$label_2}</label>
    EOD;
 
-//Content for radio button 
-   foreach($colors as $color){
-    $_color = ucwords($color);
-   $checked = ($color == $colors_value_radio) ? "checked = 'checked'": '';
-    $meta_HTML .=<<<EOD
+    //Content for radio button 
+    foreach ($colors as $color) {
+        $_color = ucwords($color);
+        $checked = ($color == $colors_value_radio) ? "checked = 'checked'" : '';
+        $meta_HTML .= <<<EOD
     <label for='clr{$_color}'>{$_color}</label>
     <input id='clr{$_color}' type='radio' name='radio_' value='{$color}' {$checked}/>
 
   EOD;
-}
+    }
 
-$meta_HTML .=<<<EOD
+    $meta_HTML .= <<<EOD
 <div>
     <label for='select'>Your favorit color select</label>
     <select id='select' name='select_color'>
 EOD;
 
-foreach($colors as $color){
-    $_color = ucwords($color);
-    $selected ='';
-    if($_color == $color_select){
-    $selected = 'selected';}
-    $meta_HTML .=<<<EOD
+    foreach ($colors as $color) {
+        $_color = ucwords($color);
+        $selected = '';
+        if ($_color == $color_select) {
+            $selected = 'selected';
+        }
+        $meta_HTML .= <<<EOD
             <option {$selected} value={$_color}>{$_color}</option>
     EOD;
-}
-$meta_HTML .= " </select>";
+    }
+    $meta_HTML .= " </select>";
 
 
 
-$meta_HTML .= "</div>";
+    $meta_HTML .= "</div>";
 
     echo $meta_HTML;
-
 }
 
 // Save Data
-function save_data_in_database($post_id){
+function save_data_in_database($post_id)
+{
 
-    array_key_exists('names',$_POST)?update_post_meta($post_id, 'save_name_fild', $_POST['names']):'';
+    array_key_exists('names', $_POST) ? update_post_meta($post_id, 'save_name_fild', $_POST['names']) : '';
 
     if (array_key_exists('checkbox', $_POST)) {
         update_post_meta($post_id, 'save_filds', $_POST['checkbox']);
@@ -209,13 +225,13 @@ function save_data_in_database($post_id){
     }
 
 
-// save for radio button 
+    // save for radio button 
     if (array_key_exists('radio_', $_POST)) {
         update_post_meta($post_id, 'save_filds_radio', $_POST['radio_']);
     } else {
         delete_post_meta($post_id, 'save_filds_radio');
     }
-// save for select button 
+    // save for select button 
     if (array_key_exists('select_color', $_POST)) {
         update_post_meta($post_id, 'save_filds_select', $_POST['select_color']);
     } else {
@@ -244,10 +260,6 @@ function save_data_in_database($post_id){
     // } else {
     //     delete_post_meta($post_id, 'save_filds');
     // }
- 
+
 }
-add_action('save_post','save_data_in_database');
-
-
-
-?>
+add_action('save_post', 'save_data_in_database');
